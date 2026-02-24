@@ -8,6 +8,12 @@ A high-performance Python game engine focused on realistic natural environment s
 
 *HT_Engine Demo - 49 FPS, orange-yellow sun, dry rock sand terrain (~520K triangles)*
 
+## 🎬 Intro Animation
+
+[Watch the intro animation](intro_animation.mp4)
+
+A cinematic introduction to HT_Engine's capabilities.
+
 **Model Source:** The terrain model shown in this screenshot is "Dry Rock Sand Terrain" by **josevega**.
 - **Author:** josevega
 - **Source:** https://www.aigei.com/item/free_dry_rock.html
