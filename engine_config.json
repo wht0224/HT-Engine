@@ -1,0 +1,82 @@
+{
+    "frontend": {
+        "type": "tkinter",
+        "enable_html": false,
+        "enable_tkinter": true,
+        "ui_type": "game"
+    },
+    "ui": {
+        "theme": "dark",
+        "layout": "blender_style",
+        "enable_docking": false,
+        "enable_gizmos": false
+    },
+    "viewport": {
+        "default_view": "perspective",
+        "show_grid": true,
+        "show_axes": true,
+        "background_color": [
+            0.3,
+            0.5,
+            0.8,
+            1.0
+        ]
+    },
+    "logging": {
+        "level": "WARNING",
+        "enable_file_logging": false,
+        "log_file": "engine.log"
+    },
+    "renderer": {
+        "enable_render_result": true,
+        "render_result_interval": 0
+    },
+    "enhanced_rendering": {
+        "enabled": false,
+        "quality": "medium",
+        "ray_tracing": false,
+        "super_resolution": false,
+        "ray_tracing_quality": "low",
+        "super_resolution_quality": "medium",
+        "max_ray_depth": 2,
+        "ray_count": 8,
+        "enable_volumetric_light": false
+    },
+    "mcp": {
+        "enable_mcp_server": false,
+        "enable_api_server": false
+    },
+    "enable_volumetric_clouds": false,
+    "enable_enhanced_atmosphere": true,
+    "atmosphere_quality": "high",
+    "enable_advanced_lighting": true,
+    "use_gpu_advanced_lighting": true,
+    "enable_render_pipeline": false,
+    "enable_ao": false,
+    "enable_ssr": false,
+    "enable_color_grading": false,
+    "enable_bloom": false,
+    "enable_dof": false,
+    "enable_motion_blur": false,
+    "enable_fsr": false,
+    "enable_hydro_visual": false,
+    "sim_rule_enabled": {
+        "GpuVolumetricCloud": false,
+        "GpuBloom": false,
+        "GpuSsr": false,
+        "GpuVolumetricLight": false,
+        "GpuMotionBlur": false,
+        "GpuPathTrace": false,
+        "Lighting.GlobalIlluminationProbes": false,
+        "Atmosphere.ScatteringEnhanced": true,
+        "Atmosphere.FogGPU": false,
+        "Atmosphere.VolumetricCloudGPU": false,
+        "Lighting.ScreenSpaceShadows": true,
+        "Hydro.PlanarReflection": false,
+        "Hydro.Caustics": false,
+        "Hydro.Visual": false,
+        "Lighting.OcclusionGPU": true,
+        "Lighting.ReflectionGPU": false,
+        "Lighting.PropagationGPU": false
+    }
+}
