@@ -91,7 +91,7 @@ We openly acknowledge our limitations and the "legacy code" (some parts of the c
 pip install -r requirements.txt
 
 # Run the demo
-python play_test_iceland.py
+python terrain_demo.py
 ```
 
 ## License
