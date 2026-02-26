@@ -123,8 +123,8 @@ All games developed using HT_Engine must display in the startup screen:
 | Developer Type | Annual Fee | Notes |
 |---------------|------------|-------|
 | Impoverished Developer/Student | Year 1: $0, Year 2: $5, Year 3+: $10 | Poverty proof required (low-income certificate, debt, no income, etc.) |
-| Regular Student | $20/year | Student ID required |
-| Individual Developer | $50/year | Independent developer, non-company entity |
+| Regular Student | $10/year | Student ID required |
+| Individual Developer | $49/year | Independent developer, non-company entity |
 | Small Team (≤5 people) | $200/year | Core development team only, excluding marketing/admin |
 | Medium Team (6-20 people) | $1000/year | Core development team only, excluding marketing/admin |
 | Large Enterprise (>20 people) | $3000/year | Core development team only, excluding marketing/admin |
@@ -148,7 +148,7 @@ See [COMMERCIAL_LICENSE](COMMERCIAL_LICENSE.md) for details.
 
 | Feature | GPLv3 | Commercial License (Current) | Commercial License (Future) |
 |---------|-------|------------------------------|----------------------------|
-| Cost | Free | Free (attribution required) | Free (attribution required) |
+| Cost | Free | Annual fee (see below) | Annual fee + revenue share |
 | Open source requirement | Must open source | No need | No need |
 | Closed source development | ❌ Not allowed | ✅ Allowed (attribution required) | ✅ Allowed (attribution required) |
 | Technical support | Best-effort (no guarantee) | Best-effort (no guarantee) | Best-effort (no guarantee) |
@@ -159,7 +159,7 @@ See [COMMERCIAL_LICENSE](COMMERCIAL_LICENSE.md) for details.
 | Personal learning | ✅ Free | ✅ Free (attribution required) | ✅ Free (attribution required) |
 | Open source games | ✅ Free | ✅ Free (attribution required) | ✅ Free (attribution required) |
 | Closed source games (impoverished/student) | ❌ Not allowed | ✅ $0-$10/year (attribution required) | ✅ 0%-1% share (attribution required) |
-| Closed source games (individual) | ❌ Not allowed | ✅ $50/year (attribution required) | ✅ 0.5%-1% share (attribution required) |
+| Closed source games (individual) | ❌ Not allowed | ✅ $49/year (attribution required) | ✅ 0.5%-1% share (attribution required) |
 | Closed source games (small team) | ❌ Not allowed | ✅ $200/year (attribution required) | ✅ 1%-2% share (attribution required) |
 | Closed source games (medium team) | ❌ Not allowed | ✅ $1000/year (attribution required) | ✅ 1%-2% share (attribution required) |
 | Closed source games (large enterprise) | ❌ Not allowed | ✅ $3000/year (attribution required) | ✅ 1%-2% share (attribution required) |
