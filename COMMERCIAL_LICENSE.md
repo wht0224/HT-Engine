@@ -4,7 +4,7 @@
 **Effective Date: February 24, 2026**
 
 **Copyright (c) 2026 Wang Ruilin**  
-**Email: 13910593150@139.com**
+**Email: 13910593150@139.com / wht333@qq.com**
 
 ---
 
@@ -226,7 +226,7 @@ Contributors who make valuable contributions may receive discounts or exemptions
 
 **How to Apply:**
 1. Submit your contribution via GitHub or email
-2. Contact the author at 13910593150@139.com
+2. Contact the author at 13910593150@139.com or wht333@qq.com
 3. Author will review and determine appropriate rewards based on contribution quality and impact
 
 ---
@@ -316,7 +316,7 @@ After author becomes adult and establishes company, income reporting and revenue
 - No refunds after 30 days
 
 ### 6.2 Refund Process
-- Send refund request to 13910593150@139.com
+- Send refund request to 13910593150@139.com or wht333@qq.com
 - Explain refund reason
 - Refund will be processed within 7 business days
 
@@ -374,7 +374,7 @@ After termination:
 
 For any questions or to purchase a license, please contact:
 
-- **Email:** 13910593150@139.com
+- **Email:** 13910593150@139.com / wht333@qq.com
 - **WeChat:** wxid_pt34d1oc0a0d22
 
 ---
@@ -416,7 +416,7 @@ A: No. License only allows you to use HT_Engine to develop products, not to sell
 A: No. This constitutes an "engine product" and violates license terms.
 
 **Q: I improved HT_Engine and submitted the code. Can I get a discount when making games?**
-A: Contributors who make valuable contributions may be eligible for discounts or exemptions on commercial licenses. Contact the author at 13910593150@139.com to discuss your contribution and potential rewards. Rewards are determined on a case-by-case basis.
+A: Contributors who make valuable contributions may be eligible for discounts or exemptions on commercial licenses. Contact the author at 13910593150@139.com or wht333@qq.com to discuss your contribution and potential rewards. Rewards are determined on a case-by-case basis.
 
 ### 11.2 License Comparison
 
