@@ -89,7 +89,7 @@ After I become an adult and establish a company, I will switch to **annual fee +
 #### 2.2.2 Individual Developer Revenue Share
 
 **Income Threshold:**
-- Annual revenue < $50,000: No revenue share (only $50 annual fee)
+- Annual revenue < $50,000: No revenue share (only $49 annual fee)
 - $50,000 ≤ Annual revenue < $100,000: 0.5% revenue share
 - Annual revenue ≥ $100,000: 1% revenue share
 
@@ -390,7 +390,7 @@ A: No. Revenue share only starts from the year it's activated. Previous years on
 A: No. From Year 3 onwards, it's fixed at $10/year and will not increase.
 
 **Q: I'm a student. Can I still use student license after graduation?**
-A: After graduation, you need to upgrade to individual developer license ($50/year).
+A: After graduation, you need to upgrade to individual developer license ($49/year).
 
 **Q: My game earned $50k in Year 1 and $500k in Year 2. How is revenue share calculated?**
 A: Calculated separately by year:
