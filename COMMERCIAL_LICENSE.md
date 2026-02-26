@@ -57,7 +57,7 @@ Until I become an adult and establish a company, I use a **simple annual fee mod
 |---------------|------------|-------|
 | Impoverished Developer / Impoverished Student | Year 1: $0<br>Year 2: $5<br>Year 3+: $10 | Poverty proof required |
 | Regular Student | $10/year | Student ID required |
-| Individual Developer | $50/year | Independent developer |
+| Individual Developer | $49/year | Independent developer |
 | Small Team (≤5 people) | $200/year | Up to 5 team members |
 | Medium Team (6-20 people) | $1000/year | 6-20 team members |
 | Large Enterprise (>20 people) | $3000/year | More than 20 team members |
@@ -129,9 +129,18 @@ After I become an adult and establish a company, I will switch to **annual fee +
 - **Future Revenue Share:** Follow individual developer standards (0.5%-1%)
 - **Limitation:** Must upgrade after graduation
 
+**Student Teams**
+- **Scope:** Teams where all core members are students
+- **Requirements:** All members provide valid student IDs
+- **Discount:** 50% off the corresponding team level fee
+- **Examples:**
+  - Small student team (≤5 people): $200 × 50% = $100/year
+  - Medium student team (6-20 people): $1000 × 50% = $500/year
+  - Large student team (>20 people): $3000 × 50% = $1500/year
+
 **Individual Developer**
 - **Scope:** Independent developers, non-company entities
-- **Current Fee:** $50/year
+- **Current Fee:** $49/year
 - **Future Revenue Share:** <$50k: 0%; $50k-$100k: 0.5%; ≥$100k: 1%
 
 **Small Team (≤5 people)**
@@ -439,9 +448,9 @@ A: Contributors who make valuable contributions may be eligible for discounts or
 - Actual payment: $10
 
 **Example 4: Individual Developer**
-- Annual fee: $50
+- Annual fee: $49
 - Income: $1M
-- Actual payment: $50
+- Actual payment: $49
 
 **Example 5: Small Team**
 - Annual fee: $200
@@ -466,18 +475,18 @@ A: Contributors who make valuable contributions may be eligible for discounts or
 - Actual payment: $10 + $5000 = $5010
 
 **Example 8: Individual Developer (Medium Income)**
-- Base annual fee: $50
+- Base annual fee: $49
 - Annual income: $80k ($50k ≤ income < $100k)
 - Revenue share rate: 0.5%
 - Revenue share amount: $80k × 0.5% = $400
-- Actual payment: $50 + $400 = $450
+- Actual payment: $49 + $400 = $449
 
 **Example 9: Individual Developer (High Income)**
-- Base annual fee: $50
+- Base annual fee: $49
 - Annual income: $300k (≥ $100k)
 - Revenue share rate: 1%
 - Revenue share amount: $300k × 1% = $3000
-- Actual payment: $50 + $3000 = $3050
+- Actual payment: $49 + $3000 = $3049
 
 **Example 10: Team (Low Income)**
 - Base annual fee: $200 (small team)
