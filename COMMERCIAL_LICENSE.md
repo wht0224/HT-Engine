@@ -57,7 +57,7 @@ Until I become an adult and establish a company, I use a **simple annual fee mod
 |---------------|------------|-------|
 | Impoverished Developer / Impoverished Student | Year 1: $0<br>Year 2: $5<br>Year 3+: $10 | Poverty proof required |
 | Regular Student | $10/year | Student ID required |
-| Individual Developer | $50/year | Independent developer |
+| Individual Developer | $49/year | Independent developer |
 | Small Team (≤5 people) | $200/year | Up to 5 team members |
 | Medium Team (6-20 people) | $1000/year | 6-20 team members |
 | Large Enterprise (>20 people) | $3000/year | More than 20 team members |
@@ -131,7 +131,7 @@ After I become an adult and establish a company, I will switch to **annual fee +
 
 **Individual Developer**
 - **Scope:** Independent developers, non-company entities
-- **Current Fee:** $50/year
+- **Current Fee:** $49/year
 - **Future Revenue Share:** <$50k: 0%; $50k-$100k: 0.5%; ≥$100k: 1%
 
 **Small Team (≤5 people)**
