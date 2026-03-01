@@ -132,4 +132,4 @@ After creation, export as .glb or .gltf format for use.
 
 ---
 
-For questions, please contact: 13910593150@139.com / wht333@qq.com
+For questions, please contact: 13910593150@139.com

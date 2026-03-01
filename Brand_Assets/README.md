@@ -52,7 +52,7 @@ These brand assets are provided under the same license as HT_Engine. You may use
 ## Contact
 
 For questions about branding or attribution:
-- Email: 13910593150@139.com / wht333@qq.com
+- Email: 13910593150@139.com
 - WeChat: wxid_pt34d1oc0a0d22
 
 ---

@@ -6,13 +6,14 @@ A high-performance Python game engine focused on realistic natural environment s
 
 ![HT_Engine Demo](cdd3d7f59f6e2f429f328d4e6c93ecc7.png)
 
-*HT_Engine Demo - 49 FPS, orange-yellow sun, dry rock sand terrain (~520K triangles)*
+*HT_Engine Demo - 22~26 FPS, orange-yellow sun, dry rock sand terrain (~520K triangles, ~100+ dynamic objects)*
 
-## 🎬 Intro Animation
-
-[Watch the intro animation](intro_animation.mp4)
-
-A cinematic introduction to HT_Engine's capabilities.
+**Rendering Status:**
+- Draw Calls: ~100+ (terrain + dynamic objects)
+- GPU Instancing: Not enabled yet
+- Optimization Used: Simple state batching (grouping by material + mesh)
+- Research Direction: CPU-GPU interaction optimization & GPU instancing
+- Future Plan: "Community System" self-developed GPU instancing system (coming this summer)
 
 **Model Source:** The terrain model shown in this screenshot is "Dry Rock Sand Terrain" by **josevega**.
 - **Author:** josevega
@@ -27,7 +28,7 @@ The sun effect is procedurally generated using shaders.
 
 **Performance Benchmark:**
 - **GPU:** NVIDIA GTX 1650 Max-Q (4GB VRAM)
-- **FPS:** 49 FPS stable
+- **FPS:** 22~26 FPS stable (terrain + 100+ dynamic objects)
 - **Model:** ~520,000 triangles (Dry Rock Sand Terrain by josevega)
 - **Demo:** `terrain_demo.py`
 - **Active GPU-Accelerated Features:**
@@ -35,14 +36,7 @@ The sun effect is procedurally generated using shaders.
   - Screen Space Shadows (Lighting.ScreenSpaceShadows)
   - Enhanced Atmospheric Scattering (Atmosphere.ScatteringEnhanced)
   - Atmospheric Optical Effects (Atmosphere.OpticalGPU)
-  - Global Illumination Probes (Lighting.GlobalIlluminationProbes)
-  - Volumetric Light / God Rays (VolumetricLight)
-  - Advanced Lighting System
   - Simple Physics (Physics.SimpleRigidBody)
-
-*Yes, this is a pure Python engine achieving 49 FPS on a mid-range laptop GPU with 520K triangles and full texture mapping while running 8+ GPU-accelerated rendering features. Even we were surprised.*
-
-**Even More Impressive:** We have tested HT_Engine with a **720,000 triangle model** (Iceland Mountain from Aigei.com) and achieved **49 FPS** with the same GPU-accelerated features. Due to copyright restrictions, we cannot include this model in the open-source repository or showcase it directly. However, you can download it yourself and test the engine's capabilities: [Aigei.com - Iceland Mountain](https://www.aigei.com/item/bing_chuan_xue_11.html).
 
 ## Current Status: 0.8 MVP
 
@@ -91,82 +85,18 @@ We openly acknowledge our limitations and the "legacy code" (some parts of the c
 pip install -r requirements.txt
 
 # Run the demo
-python terrain_demo.py
+python play_test_iceland.py
 ```
 
 ## License
 
-This project uses a **dual-license model**: GPLv3 + Commercial License
+**Default:** [GPLv3](LICENSE) (free for open source projects)
 
-### Option 1: GPLv3 (Free)
+**Commercial Use:** Contact us for commercial license
+- 📧 Email: 13910593150@139.com
+- 💬 WeChat: wxid_pt34d1oc0a0d22
 
-- ✅ Personal learning and research: Completely free
-- ✅ Engine improvements: Must be open-sourced
-- ✅ Commercial use: Allowed, but must open-source entire work
-- ❌ Cannot modify in closed source
-
-### Option 2: Commercial License (Paid)
-
-- ✅ Can modify in closed source
-- ✅ Can develop commercial products in closed source
-- ✅ No need to disclose source code
-- 💰 Annual fee model (current) + Annual fee + revenue share model (future)
-
-**⚠️ Mandatory Attribution Requirement:**
-All games developed using HT_Engine must display in the startup screen:
-- Text: "Made with HT_Engine" or "Powered by HT_Engine"
-- Duration: At least 2 seconds
-- Location: Splash screen, loading screen, or main menu
-
-**Current Stage (Author is a Minor):**
-
-| Developer Type | Annual Fee | Notes |
-|---------------|------------|-------|
-| Impoverished Developer/Student | Year 1: $0, Year 2: $5, Year 3+: $10 | Poverty proof required (low-income certificate, debt, no income, etc.) |
-| Regular Student | $10/year | Student ID required |
-| Individual Developer | $49/year | Independent developer, non-company entity |
-| Small Team (≤5 people) | $200/year | Core development team only, excluding marketing/admin |
-| Medium Team (6-20 people) | $1000/year | Core development team only, excluding marketing/admin |
-| Large Enterprise (>20 people) | $3000/year | Core development team only, excluding marketing/admin |
-
-**Future Stage (After Author Becomes Adult and Establishes Company):**
-
-Base annual fee + revenue share (when annual revenue exceeds threshold):
-
-| Developer Type | Revenue Threshold | Revenue Share Rate |
-|----------------|-------------------|-------------------|
-| Impoverished Developer | ≥$100k/year | Year 1: 0%, Year 2: 0.1%, Year 3+: 1% |
-| Individual Developer | $50k-$100k: 0.5%<br>≥$100k: 1% | Tiered calculation |
-| All Teams | $100k-$500k: 1%<br>≥$500k: 2% | Unified standard |
-
-**Technical Support:**
-The author is a 16-year-old student. All technical support is provided on a best-effort basis with no guaranteed response time. Paid users do not receive exclusive technical support services.
-
-See [COMMERCIAL_LICENSE](COMMERCIAL_LICENSE.md) for details.
-
-### Comparison
-
-| Feature | GPLv3 | Commercial License (Current) | Commercial License (Future) |
-|---------|-------|------------------------------|----------------------------|
-| Cost | Free | Annual fee (see below) | Annual fee + revenue share |
-| Open source requirement | Must open source | No need | No need |
-| Closed source development | ❌ Not allowed | ✅ Allowed (attribution required) | ✅ Allowed (attribution required) |
-| Technical support | Best-effort (no guarantee) | Best-effort (no guarantee) | Best-effort (no guarantee) |
-| Suitable for | Open source projects, learning | Commercial games, closed source products | Commercial games, closed source products |
-
-| Use Case | GPLv3 | Commercial (Current) | Commercial (Future) |
-|---------|-------|---------------------|---------------------|
-| Personal learning | ✅ Free | ✅ Free (attribution required) | ✅ Free (attribution required) |
-| Open source games | ✅ Free | ✅ Free (attribution required) | ✅ Free (attribution required) |
-| Closed source games (impoverished/student) | ❌ Not allowed | ✅ $0-$10/year (attribution required) | ✅ 0%-1% share (attribution required) |
-| Closed source games (individual) | ❌ Not allowed | ✅ $49/year (attribution required) | ✅ 0.5%-1% share (attribution required) |
-| Closed source games (small team) | ❌ Not allowed | ✅ $200/year (attribution required) | ✅ 1%-2% share (attribution required) |
-| Closed source games (medium team) | ❌ Not allowed | ✅ $1000/year (attribution required) | ✅ 1%-2% share (attribution required) |
-| Closed source games (large enterprise) | ❌ Not allowed | ✅ $3000/year (attribution required) | ✅ 1%-2% share (attribution required) |
-
-**All commercial license use cases require mandatory attribution.**
-
-For detailed terms, see [LICENSE](LICENSE) and [COMMERCIAL_LICENSE](COMMERCIAL_LICENSE.md).
+*Commercial license allows closed-source development with mandatory attribution.*
 
 ## Contributing & Academic Recognition
 
@@ -178,8 +108,8 @@ Issues and Pull Requests are welcome!
 
 **Immediate Benefits:**
 - Contributors retain attribution rights to their code
-- Grant the author the right to use the code in commercial versions
-- Eligible for commercial license discounts (contact author)
+- Grant the author the right to use the code in all versions
+- Recognition in project documentation
 
 **Academic Recognition:**
 
@@ -211,7 +141,7 @@ The author is currently exploring the academic potential of HT_Engine's innovati
 
 ## Contact
 
-- Email: 13910593150@139.com / wht333@qq.com
+- Email: 13910593150@139.com
 - WeChat: wxid_pt34d1oc0a0d22
 
 ## Acknowledgments

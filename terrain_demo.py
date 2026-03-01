@@ -12,7 +12,7 @@ sys.path.insert(0, os.getcwd())
 from Engine.Engine import Engine
 from Engine.Scene.SceneNode import SceneNode
 from Engine.Scene.Camera import Camera
-from Engine.Scene.Light import DirectionalLight, AmbientLight
+from Engine.Scene.Light import DirectionalLight, AmbientLight, PointLight
 from Engine.Scene.MeshRenderer import MeshRenderer
 from Engine.Renderer.Resources.ModelLoader import ModelLoader
 from Engine.Renderer.Resources.Mesh import Mesh
@@ -25,6 +25,8 @@ terrain_mesh = None
 terrain_node = None
 player_controller = None
 test_ended = False
+dynamic_objects = []  # 存储动态物体
+dynamic_lights = []   # 存储动态光源
 
 global sun_node
 
@@ -45,6 +47,9 @@ def main():
     if not engine.is_initialized:
         print("引擎初始化失败")
         return
+    
+    # 记录开始时间用于动画计算
+    start_time = time.time()
     
     # 立即禁用 EffectManager 的自动优化，强制启用所有特效
     if hasattr(engine, 'renderer') and engine.renderer:
@@ -102,27 +107,26 @@ def main():
     else:
         print("索引数据检查通过")
     
-    print("重新计算法线...")
-    terrain_mesh.recalculate_normals(flip=False)
-    print(f"法线计算完成：{len(terrain_mesh.normals)} 个法线")
+    print("使用模型原始法线和切线...")
+    print(f"原始法线数量：{len(terrain_mesh.normals)} 个")
     
-    # 修复法线 - 强制所有法线朝上（避免黑色三角形）
-    print("强制法线朝上...")
-    for i in range(len(terrain_mesh.normals)):
-        terrain_mesh.normals[i] = Vector3(0, 1, 0)
-    print(f"已设置 {len(terrain_mesh.normals)} 个法线朝上")
+    # 不要重新计算法线！使用模型原始法线
+    # 重新计算会破坏原始地形表面的法线连续性，导致视觉闪烁
     
-    # 确保切线数据存在（某些渲染器需要）
-    if not hasattr(terrain_mesh, 'tangents') or terrain_mesh.tangents is None or len(terrain_mesh.tangents) == 0:
-        print("生成切线数据...")
+    # 检查切线是否存在
+    if hasattr(terrain_mesh, 'tangents') and terrain_mesh.tangents is not None and len(terrain_mesh.tangents) > 0:
+        print(f"使用模型原始切线：{len(terrain_mesh.tangents)} 个")
+    else:
+        print("模型没有切线数据，使用默认切线")
         terrain_mesh.tangents = [Vector3(1, 0, 0) for _ in range(len(terrain_mesh.vertices))]
-        print(f"切线数据生成完成: {len(terrain_mesh.tangents)} 个")
     
-    # 确保UV数据存在
-    if not hasattr(terrain_mesh, 'uvs') or terrain_mesh.uvs is None or len(terrain_mesh.uvs) == 0:
-        print("生成默认UV数据...")
+    # 不要覆盖 UV！模型自带 UV，覆盖了纹理就无法映射了
+    # 只检查 UV 是否存在
+    if hasattr(terrain_mesh, 'uvs') and terrain_mesh.uvs is not None and len(terrain_mesh.uvs) > 0:
+        print(f"使用模型自带的 UV 数据：{len(terrain_mesh.uvs)} 个")
+    else:
+        print("警告：模型没有 UV 数据，纹理将无法正确映射")
         terrain_mesh.uvs = [Vector2(0, 0) for _ in range(len(terrain_mesh.vertices))]
-        print(f"UV数据生成完成: {len(terrain_mesh.uvs)} 个")
     
     # 确保顶点颜色数据存在（避免黑色三角形）
     if not hasattr(terrain_mesh, 'colors') or terrain_mesh.colors is None or len(terrain_mesh.colors) == 0:
@@ -155,41 +159,54 @@ def main():
     terrain_node = SceneNode("Terrain")
     terrain_node.mesh = terrain_mesh
     
-    # 创建材质并加载纹理
-    terrain_material = Material()
-    terrain_material.set_double_sided(False)
-    terrain_material.set_wireframe(False)
+    # 标记为静态网格，第一帧上传到 GPU 后就不再更新
+    terrain_mesh.is_static = True
     
-    # 设置基础颜色（确保有颜色）
-    terrain_material.set_color(Vector3(0.5, 0.5, 0.5))  # 中灰色作为基础色
-    
-    # 设置基础颜色（确保有颜色）
-    terrain_material.set_color(Vector3(0.5, 0.5, 0.5))  # 中灰色作为基础色
-    
-    # 尝试加载纹理图片（新模型可能自带纹理或不需要外部纹理）
-    # 新模型纹理路径（干燥岩砂地形）
-    texture_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models", "干燥岩砂地形", "╢α╕±╩╜", "gltf", "free_-_dry_rock_sand_terrain", "textures", "material_0_diffuse.png")
-    if os.path.exists(texture_path):
-        print(f"加载纹理: {texture_path}")
-        try:
-            from PIL import Image
-            import numpy as np
-            img = Image.open(texture_path).convert('RGB')
-            img_array = np.array(img)
-            terrain_material.base_color_image = img_array
-            print(f"纹理加载成功: {img_array.shape}")
-        except Exception as e:
-            print(f"纹理加载失败: {e}")
-            terrain_material.set_color(Vector3(0.8, 0.8, 0.9))  # 雪白色
+    # 使用 ModelLoader 加载的材质（包含纹理）
+    if hasattr(terrain_mesh, 'material') and terrain_mesh.material is not None:
+        print("使用模型自带的材质和纹理")
+        terrain_material = terrain_mesh.material
+        terrain_node.material = terrain_material
     else:
-        print("纹理文件不存在，使用雪白色")
-        terrain_material.set_color(Vector3(0.8, 0.8, 0.9))  # 雪白色
+        print("模型没有材质，创建新材质")
+        # 创建材质并加载纹理
+        terrain_material = Material()
+        terrain_material.set_double_sided(False)
+        terrain_material.set_wireframe(False)
+        
+        # 设置基础颜色（确保有颜色）
+        terrain_material.set_color(Vector3(0.7, 0.65, 0.6))  # 浅棕灰色（岩石色）
+        
+        # 尝试加载纹理图片
+        texture_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models", "干燥岩砂地形", "╢α╕±╩╜", "gltf", "free_-_dry_rock_sand_terrain", "textures", "material_0_diffuse.png")
+        if os.path.exists(texture_path):
+            print(f"加载纹理：{texture_path}")
+            try:
+                from PIL import Image
+                import numpy as np
+                img = Image.open(texture_path).convert('RGB')
+                img_array = np.array(img)
+                terrain_material.base_color_image = img_array
+                print(f"纹理加载成功：{img_array.shape}")
+            except Exception as e:
+                print(f"纹理加载失败：{e}")
+        else:
+            print("纹理文件不存在")
+        
+        terrain_node.material = terrain_material
     
     # 禁用阴影以提高性能
     terrain_material.cast_shadows = False
     terrain_material.receive_shadows = False
     
-    terrain_node.material = terrain_material
+    # 不要设置 is_dirty=False！让材质在第一帧上传纹理
+    # 地形单独渲染，纹理绑定不会受影响
+    
+    # 调试输出
+    print(f"地形材质颜色：{terrain_material.base_color}")
+    print(f"地形材质是否有纹理：{hasattr(terrain_material, 'base_color_image') and terrain_material.base_color_image is not None}")
+    print(f"地形材质 is_dirty: {terrain_material.is_dirty}")
+    
     scene_mgr.root_node.add_child(terrain_node)
     
     # 保持原始方向，不翻转
@@ -230,7 +247,7 @@ def main():
     print("设置相机...")
     cam = Camera("PlayerCamera")
     aspect_ratio = 16.0 / 9.0
-    cam.set_perspective(70, aspect_ratio, 0.1, 8000.0)  # 增加FOV到70度，更有电影感
+    cam.set_perspective(70, aspect_ratio, 0.1, 8000.0)
     cam.set_position(start_pos)
     cam.look_at(Vector3(start_pos.x + 10, start_pos.y - 5, start_pos.z + 10))
     scene_mgr.active_camera = cam
@@ -499,10 +516,166 @@ def main():
     player_controller.set_position(start_pos.x, start_pos.y, start_pos.z)
     
     print("\n" + "="*100)
-    print("冰岛山Demo启动! (上帝模式)")
+    print("冰岛山 Demo 启动！(上帝模式)")
     print("控制：WASD 移动，鼠标旋转视角")
     print("Space 上升，Ctrl/C 下降，Shift 加速")
     print("="*100)
+    
+    # ========== 添加动态物体和光源 ==========
+    print("\n创建动态物体和光源...")
+    
+    # 创建 100 个动态物体（50 个立方体 + 50 个球体）
+    print("创建 50 个立方体和 50 个球体...")
+    
+    # 创建立方体网格
+    cube_mesh = Mesh.create_cube(2.0)  # 2x2x2 的立方体
+    
+    # 创建球体网格
+    sphere_mesh = Mesh.create_sphere(1.5, 16, 16)  # 半径 1.5，16x16 分段
+    
+    # 创建不同颜色的材质
+    colors = [
+        Vector3(1.0, 0.2, 0.2),  # 红
+        Vector3(0.2, 1.0, 0.2),  # 绿
+        Vector3(0.2, 0.2, 1.0),  # 蓝
+        Vector3(1.0, 1.0, 0.2),  # 黄
+        Vector3(1.0, 0.2, 1.0),  # 紫
+        Vector3(0.2, 1.0, 1.0),  # 青
+        Vector3(1.0, 0.5, 0.0),  # 橙
+        Vector3(0.5, 0.0, 1.0),  # 靛
+    ]
+    
+    # 创建 50 个立方体 - 紧凑分布避免深度冲突
+    for i in range(50):
+        # 圆形分布 + 大高度差异
+        angle = (i / 50.0) * math.pi * 2
+        radius = 40 + (i % 5) * 10  # 40-80 单位半径（紧凑）
+        x = start_pos.x + math.cos(angle) * radius
+        z = start_pos.z + math.sin(angle) * radius
+        y = start_pos.y + 20 + (i % 10) * 15  # 20-155 单位高度，10 层分布
+        
+        # 创建节点
+        cube_node = SceneNode(f"DynamicCube_{i}")
+        cube_node.mesh = cube_mesh
+        
+        # 使用共享材质（SDDB 优化关键）
+        material = Material()
+        material.set_color(colors[i % len(colors)])
+        material.set_emissive(colors[i % len(colors)] * 0.3, strength=0.5)  # 轻微自发光
+        material.set_double_sided(True)  # 双面渲染，避免缺面
+        material.set_wireframe(False)  # 确保不是线框模式
+        material.is_dirty = False  # 强制标记为已上传，避免每帧更新
+        cube_node.material = material
+        
+        # 设置位置
+        cube_node.set_position(Vector3(x, y, z))
+        
+        # 添加随机旋转（使用 Quaternion）
+        from Engine.Math import Quaternion
+        cube_node.set_rotation(
+            Quaternion.from_euler(
+                math.radians(i * 7.2),  # 0-360 度
+                math.radians(i * 3.6),
+                math.radians(i * 1.8)
+            )
+        )
+        
+        # 添加到场景
+        scene_mgr.root_node.add_child(cube_node)
+        dynamic_objects.append({
+            'node': cube_node,
+            'type': 'cube',
+            'original_pos': Vector3(x, y, z),
+            'angle': angle,
+            'speed': 0.5 + (i % 5) * 0.2,  # 不同运动速度
+            'axis': 'y' if i % 3 == 0 else ('x' if i % 3 == 1 else 'z')
+        })
+    
+    print(f"已创建 {50} 个立方体")
+    
+    # 创建 50 个球体 - 外层分布
+    for i in range(50):
+        # 外层圆形分布，与立方体错开
+        angle = (i / 50.0) * math.pi * 2 + 0.2
+        radius = 90 + (i % 6) * 8  # 90-138 单位半径
+        x = start_pos.x + math.cos(angle) * radius
+        z = start_pos.z + math.sin(angle) * radius
+        y = start_pos.y + 30 + (i % 8) * 12  # 30-126 单位高度，8 层分布
+        
+        # 创建节点
+        sphere_node = SceneNode(f"DynamicSphere_{i}")
+        sphere_node.mesh = sphere_mesh
+        
+        # 使用共享材质（SDDB 优化关键）
+        material = Material()
+        material.set_color(colors[(i + 2) % len(colors)])
+        material.set_emissive(colors[(i + 2) % len(colors)] * 0.2, strength=0.3)
+        material.set_double_sided(True)  # 双面渲染，避免缺面
+        material.set_wireframe(False)  # 确保不是线框模式
+        material.is_dirty = False  # 强制标记为已上传，避免每帧更新
+        sphere_node.material = material
+        
+        # 设置位置
+        sphere_node.set_position(Vector3(x, y, z))
+        
+        # 添加场景
+        scene_mgr.root_node.add_child(sphere_node)
+        dynamic_objects.append({
+            'node': sphere_node,
+            'type': 'sphere',
+            'original_pos': Vector3(x, y, z),
+            'angle': angle,
+            'speed': 0.3 + (i % 4) * 0.15,
+            'axis': 'y' if i % 4 == 0 else ('x' if i % 4 == 1 else ('z' if i % 4 == 2 else 'xyz'))
+        })
+    
+    print(f"已创建 {50} 个球体")
+    print(f"动态物体总数：{len(dynamic_objects)}")
+    
+    # 创建 10 个动态点光源 - 紧凑分布
+    for i in range(10):
+        # 圆形分布
+        angle = (i / 10.0) * math.pi * 2
+        radius = 50 + i * 5  # 50-95 单位半径
+        x = start_pos.x + math.cos(angle) * radius
+        z = start_pos.z + math.sin(angle) * radius
+        y = start_pos.y + 25 + (i % 5) * 10  # 25-65 单位高度
+        
+        # 创建点光源
+        point_light = PointLight()
+        point_light.set_position(Vector3(x, y, z))
+        point_light.set_intensity(5.0 + (i % 3) * 2.0)  # 5-9 强度
+        point_light.set_color(colors[(i + 3) % len(colors)])
+        point_light.set_radius(30.0 + (i % 4) * 10.0)  # 30-60 单位影响半径
+        
+        # 添加到场景和光源管理器
+        scene_mgr.light_manager.add_light(point_light)
+        dynamic_lights.append({
+            'light': point_light,
+            'original_pos': Vector3(x, y, z),
+            'angle': angle,
+            'speed': 0.2 + (i % 3) * 0.1,
+            'axis': 'y' if i % 2 == 0 else 'x'
+        })
+    
+    print(f"已创建 {len(dynamic_lights)} 个动态点光源")
+    print(f"\n场景总计：{len(dynamic_objects)} 个动态物体 + {len(dynamic_lights)} 个动态光源")
+    
+    # 输出前 3 个物体的初始位置用于调试
+    print("\n前 3 个动态物体初始位置:")
+    for i in range(3):
+        obj = dynamic_objects[i]
+        pos = obj['original_pos']
+        print(f"  物体{i} ({obj['type']}): ({pos.x:.1f}, {pos.y:.1f}, {pos.z:.1f}), 轴：{obj['axis']}, 速度：{obj['speed']:.2f}")
+    
+    # 输出材质设置
+    print("\n材质设置:")
+    print(f"  双面渲染：Enabled (避免缺面)")
+    print(f"  线框模式：Disabled")
+    print(f"  自发光：Enabled (减少深度冲突)")
+    print(f"  深度偏移：Enabled (减少 Z-fighting)")
+    
+    print("="*100 + "\n")
     
     def get_input_state():
         global engine
@@ -577,10 +750,9 @@ def main():
     # 性能分析
     frame_count = 0
     last_time = time.time()
-    first_frame_rendered = False
     
     def game_update():
-        nonlocal frame_count, last_time, first_frame_rendered
+        nonlocal frame_count, last_time
         global test_ended
         if not engine.is_initialized or test_ended:
             return
@@ -588,6 +760,94 @@ def main():
         frame_start = time.time()
         
         input_state = get_input_state()
+        
+        # ========== 更新动态物体 ==========
+        dynamic_start = time.time()
+        # 使用相对时间（从程序启动开始），避免时间戳过大导致闪烁
+        elapsed_time = time.time() - start_time
+        
+        # 使用 enumerate 获取索引
+        for idx, obj_data in enumerate(dynamic_objects):
+            node = obj_data['node']
+            original_pos = obj_data['original_pos']
+            angle = obj_data['angle']
+            speed = obj_data['speed']
+            axis = obj_data['axis']
+            
+            # 根据相对时间计算新位置（正弦波运动，减少幅度避免闪烁）
+            t = elapsed_time * speed  # 使用相对时间
+            offset = math.sin(t) * 5.0  # ±5 单位振幅（原来是 10，减少到 5）
+            
+            # 添加相位偏移，避免所有物体同步运动（使用 idx 代替 i）
+            phase = idx * 0.1
+            offset += math.sin(t * 0.7 + phase) * 3.0  # 额外的慢速波动
+            
+            if axis == 'y':
+                new_pos = Vector3(original_pos.x, original_pos.y + offset, original_pos.z)
+            elif axis == 'x':
+                new_pos = Vector3(original_pos.x + offset, original_pos.y, original_pos.z)
+            elif axis == 'z':
+                new_pos = Vector3(original_pos.x, original_pos.y, original_pos.z + offset)
+            else:  # xyz
+                new_pos = Vector3(
+                    original_pos.x + math.sin(t) * 8.0,
+                    original_pos.y + math.cos(t) * 8.0,
+                    original_pos.z + math.sin(t * 0.7) * 8.0
+                )
+            
+            node.set_position(new_pos)
+            
+            # 每 30 帧输出一次前 3 个物体的位置（用于调试）
+            if frame_count % 30 == 0 and idx < 3:
+                print(f"[调试] 物体{idx} ({obj_data['type']}) 位置：({new_pos.x:.1f}, {new_pos.y:.1f}, {new_pos.z:.1f}), 时间：{t:.2f}s, 偏移：{offset:.2f}")
+            
+            # 添加自转动画（使用 Quaternion）
+            if obj_data['type'] == 'cube':
+                node.set_rotation(
+                    Quaternion.from_euler(
+                        math.radians(t * 20),
+                        math.radians(t * 15),
+                        math.radians(t * 10)
+                    )
+                )
+            elif obj_data['type'] == 'sphere':
+                node.set_rotation(
+                    Quaternion.from_euler(
+                        math.radians(t * 10),
+                        math.radians(t * 20),
+                        math.radians(t * 5)
+                    )
+                )
+        
+        # ========== 更新动态光源 ==========
+        for light_data in dynamic_lights:
+            light = light_data['light']
+            original_pos = light_data['original_pos']
+            angle = light_data['angle']
+            speed = light_data['speed']
+            axis = light_data['axis']
+            
+            # 根据相对时间计算新位置（圆周运动 + 上下浮动，减少幅度）
+            t = elapsed_time * speed  # 使用相对时间
+            circle_offset = math.cos(t * 0.5) * 3.0  # 圆周摆动（从 5 减少到 3）
+            height_offset = math.sin(t) * 4.0  # 上下浮动（从 8 减少到 4）
+            
+            if axis == 'y':
+                new_pos = Vector3(
+                    original_pos.x + circle_offset,
+                    original_pos.y + height_offset,
+                    original_pos.z + circle_offset
+                )
+            else:  # x
+                new_pos = Vector3(
+                    original_pos.x + height_offset,
+                    original_pos.y + circle_offset,
+                    original_pos.z + circle_offset
+                )
+            
+            light.set_position(new_pos)
+        
+        dynamic_time = time.time() - dynamic_start
         
         # 控制器更新
         ctrl_start = time.time()
@@ -597,25 +857,27 @@ def main():
         
         # 场景更新
         scene_start = time.time()
+        # 确保地形节点在可见节点列表中（禁用剔除）
         if terrain_node not in scene_mgr.visible_nodes:
             scene_mgr.visible_nodes.append(terrain_node)
         # 确保太阳节点也在可见节点列表中
         if 'sun_node' in globals() and sun_node not in scene_mgr.visible_nodes:
             scene_mgr.visible_nodes.append(sun_node)
-        scene_mgr.update(0.016)
+        
+        # 确保所有动态物体都在可见节点列表中（禁用剔除）
+        for obj_data in dynamic_objects:
+            node = obj_data['node']
+            if node not in scene_mgr.visible_nodes:
+                scene_mgr.visible_nodes.append(node)
+        
+        # 不调用 scene_mgr.update()，避免视锥剔除
+        # scene_mgr.update(0.016)
         scene_time = time.time() - scene_start
         
         # 渲染
         render_start = time.time()
         engine.render()
         render_time = time.time() - render_start
-        
-        # 第一帧渲染后，禁用地形网格更新以提升性能
-        if not first_frame_rendered and terrain_mesh:
-            def no_op_update(*args, **kwargs):
-                pass
-            terrain_mesh.update = no_op_update
-            first_frame_rendered = True
         
         frame_time = time.time() - frame_start
         frame_count += 1

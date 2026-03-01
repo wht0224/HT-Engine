@@ -55,4 +55,4 @@ The demo already includes a working terrain model. Just run the command above!
 
 - See [MODELS_GUIDE.md](MODELS_GUIDE.md) for more model resources
 - See [README.md](README.md) for full documentation
-- Contact: 13910593150@139.com / wht333@qq.com
+- Contact: 13910593150@139.com

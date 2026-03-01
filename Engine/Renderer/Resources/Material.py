@@ -491,17 +491,17 @@ class Material:
             GL_ONE, GL_ZERO, GL_FRONT_AND_BACK, GL_LINE, GL_FILL
         )
         
-        if self.blend_mode == "opaque":
-            glEnable(GL_DEPTH_TEST)
-        else:
-            glEnable(GL_DEPTH_TEST)
+        # 深度测试
+        glEnable(GL_DEPTH_TEST)
         
+        # 背面剔除
         if self.double_sided:
             glDisable(GL_CULL_FACE)
         else:
             glEnable(GL_CULL_FACE)
             glCullFace(GL_BACK)
         
+        # 混合模式
         if self.blend_mode == "transparent":
             glEnable(GL_BLEND)
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
@@ -514,6 +514,7 @@ class Material:
         else:
             glDisable(GL_BLEND)
         
+        # 填充模式
         if self.wireframe:
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
         else:

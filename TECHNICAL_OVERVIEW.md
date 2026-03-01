@@ -177,7 +177,7 @@ python tests/benchmark_suite.py
 
 ### Contact
 
-**Technical Questions:** 13910593150@139.com / wht333@qq.com
+**Technical Questions:** 13910593150@139.com
 **Bug Reports:** GitHub Issues (preferred)
 **Architecture Discussions:** Email with "[ARCH]" prefix
 

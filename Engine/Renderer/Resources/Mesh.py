@@ -39,6 +39,7 @@ class Mesh:
         
         # 渲染状态
         self.is_dirty = True  # 数据是否需要更新到GPU
+        self.is_static = False  # 是否是静态网格（上传后不再更新）
         self.vertex_buffer = None  # 顶点缓冲区
         self.index_buffer = None   # 索引缓冲区
         self.instance_buffer = None  # 实例化缓冲区
@@ -661,6 +662,10 @@ class Mesh:
     
     def update(self):
         """更新网格数据，将数据上传到GPU"""
+        # 如果是静态网格且已经上传过了，就不再更新
+        if self.is_static and not self.is_dirty:
+            return
+            
         if not self.is_dirty:
             return
             
@@ -742,6 +747,10 @@ class Mesh:
             self.triangle_count = self.index_count // 3 if self.index_count > 0 else vertex_count // 3
             self.is_dirty = False
             
+            # 如果是静态网格，上传完成后就锁定，不再允许更新
+            if self.is_static:
+                self.is_dirty = False
+            
         except Exception as e:
             print(f"Mesh update failed: {e}")
 
@@ -776,8 +785,14 @@ class Mesh:
         Args:
             instance_count: 实例数量
         """
-        # TODO: 实现实例化绘制逻辑
-        pass
+        from OpenGL.GL import glDrawElementsInstanced, glDrawArraysInstanced, GL_TRIANGLES, GL_UNSIGNED_INT
+        
+        self.bind()
+        if hasattr(self, 'index_count') and self.index_count > 0:
+            glDrawElementsInstanced(GL_TRIANGLES, self.index_count, GL_UNSIGNED_INT, None, instance_count)
+        else:
+            glDrawArraysInstanced(GL_TRIANGLES, 0, getattr(self, 'vertex_count', 0), instance_count)
+        self.unbind()
     
     def destroy(self):
         """销毁网格，释放资源"""

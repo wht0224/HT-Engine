@@ -846,14 +846,14 @@ class Renderer:
             # self.effect_manager.enable_effect("ambient_occlusion", True)  # 移除不支持的方法调用
             # self.effect_manager.set_ao_quality("medium")  # 移除不支持的方法调用
             
-        # 针对低端GPU的通用优化
+        # 针对低端 GPU 的通用优化
         if self.hw_info['vram_mb'] <= 4096:
-            # 启用激进的纹理压缩
-            self.vram_mgr.enable_aggressive_compression(True)
-            # 启用纹理流式加载
-            self.vram_mgr.enable_texture_streaming(True)
-            # 设置更短的纹理保留时间
-            self.vram_mgr.set_texture_retention_time(10.0)  # 10秒
+            # 禁用激进的纹理压缩（避免闪烁）
+            self.vram_mgr.enable_aggressive_compression(False)
+            # 禁用纹理流式加载（避免闪烁）
+            self.vram_mgr.enable_texture_streaming(False)
+            # 设置更长的纹理保留时间
+            self.vram_mgr.set_texture_retention_time(60.0)  # 60 秒
     
     def _update_scene_lods(self, scene, camera):
         """

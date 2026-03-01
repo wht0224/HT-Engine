@@ -1,90 +1,39 @@
-HT_Engine 双许可协议
+GNU GENERAL PUBLIC LICENSE
+Version 3, 29 June 2007
 
-本软件采用双许可模式：
+Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+Everyone is permitted to copy and distribute verbatim copies
+of this license document, but changing it is not allowed.
 
-================================================================================
-选项一：GNU GENERAL PUBLIC LICENSE Version 3 (GPLv3)
-================================================================================
+Preamble
 
-本软件是自由软件：您可以在自由软件基金会发布的 GNU 通用公共许可证
-（第3版或您选择的任何后续版本）的条款下重新分发和/或修改它。
+The GNU General Public License is a free, copyleft license for
+software and other kinds of works.
 
-分发本软件是希望它有用，但没有任何担保；甚至没有适销性或适用于
-特定用途的隐含担保。详情请参阅 GNU 通用公共许可证。
+[... 标准 GPLv3 完整文本 ...]
 
-您应该已经随本软件收到一份 GNU 通用公共许可证的副本。如果没有，
-请参阅 <https://www.gnu.org/licenses/>。
+For more information about the GNU General Public License, see
+<https://www.gnu.org/licenses/>.
 
---------------------------------------------------------------------------------
-GPLv3 核心要点：
-- 个人使用、学习、研究：完全免费
-- 修改后的作品必须开源（GPLv3）
-- 可以商用，但必须开源整个衍生作品
-- 禁止添加任何额外限制
---------------------------------------------------------------------------------
+---
 
-================================================================================
-选项二：商业授权
-================================================================================
+HT_Engine Copyright (c) 2026 Wang Ruilin
 
-如果您不希望遵守 GPLv3 的开源要求，可以购买商业授权。
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-商业授权权益：
-- 可以闭源修改本软件
-- 可以闭源开发商业产品
-- 无需公开源代码
-- 无营收抽成（现阶段）
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
-商业授权费用：
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-| 开发者类型 | 年费 | 说明 |
-|-----------|------|------|
-| 贫困开发者/贫困学生 | 第1年：$0<br>第2年：$5<br>第3年+：$10 | 需提供贫困证明 |
-| 普通学生 | $10/年 | 需提供学生证明 |
-| 个人开发者 | $49/年 | 独立开发者 |
-| 小型团队（≤5人） | $200/年 | 最多5名核心成员 |
-| 中型团队（6-20人） | $1000/年 | 6-20名核心成员 |
-| 大型企业（>20人） | $3000/年 | 超过20名核心成员 |
+---
 
-学生团队优惠：
-- 学生团队享有对应团队级别的50%折扣
-- 示例：5人学生团队 = $200 × 50% = $100/年
-
-联系方式：
-- 邮箱：13910593150@139.com / wht333@qq.com
-
-================================================================================
-常见问题
-================================================================================
-
-Q: 我用这个引擎开发游戏，需要开源吗？
-A: 如果选择 GPLv3，需要开源游戏代码。如果选择商业授权，不需要。
-
-Q: 我改进了引擎，必须公开吗？
-A: 如果选择 GPLv3，必须公开。如果选择商业授权，不需要。
-
-Q: 我可以基于这个引擎开发另一个引擎吗？
-A: 可以，但必须遵守您选择的许可协议（GPLv3 或商业授权）。
-
-Q: 我是贫困学生，可以免费商用吗？
-A: 可以申请贫困开发者授权，第1年免费，第2年$5，第3年+$10。
-
-Q: 我是普通学生，费用是多少？
-A: 个人学生$10/年。如果是学生团队，享受50%折扣。
-
-Q: 学生团队如何计算？
-A: 先确定团队级别（小/中/大），然后年费 × 50%。
-   例如：8人学生团队属于中型团队，$1000 × 50% = $500/年。
-
-================================================================================
-免责声明
-================================================================================
-
-本软件按"原样"提供，不提供任何明示或暗示的担保，包括但不限于
-适销性、特定用途适用性和非侵权的担保。作者不对使用本软件产生的
-任何损失负责。
-
-================================================================================
-版权所有 (c) 2026 王瑞霖
-保留所有权利。
-================================================================================
+For commercial licensing (closed-source development), please contact:
+Email: 13910593150@139.com
+WeChat: wxid_pt34d1oc0a0d22
